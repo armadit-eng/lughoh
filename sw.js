@@ -1,6 +1,6 @@
 // Service worker: Belajar Durusul Lughah
 // Naikkan VERSION setiap kali index.html diubah agar cache diperbarui.
-const VERSION = 'v5';
+const VERSION = 'v6';
 const SHELL = `durusul-shell-${VERSION}`;
 const RUNTIME = `durusul-runtime-${VERSION}`;
 const ASSETS = [
