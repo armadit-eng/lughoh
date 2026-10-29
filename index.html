@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f7a5a">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Belajar Durusul Lughah</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f3ea;--card:#fff;--tx:#1f2a24;--mut:#6b756e;--pri:#1f7a5a;--priD:#155a42;--ok:#2e9e5b;--bad:#c0392b;--lock:#cfcfc6;--bd:#e3ded0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121a16;--card:#1b2620;--tx:#eaf0ec;--mut:#9aa8a0;--pri:#3fbf8f;--priD:#2e9e74;--lock:#3a443e;--bd:#2c3a33}}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+.wrap{max-width:560px;margin:0 auto;padding:16px}
+h1{font-size:1.3rem;margin:4px 0}
+.sub{color:var(--mut);font-size:.9rem;margin:0 0 12px}
+.ar{font-family:"Amiri","Traditional Arabic","Noto Naskh Arabic",serif;direction:rtl}
+.bar{height:10px;background:var(--bd);border-radius:6px;overflow:hidden;margin:8px 0 18px}
+.bar i{display:block;height:100%;background:var(--pri);transition:width .4s}
+.lv{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:10px;cursor:pointer;width:100%;text-align:left;color:var(--tx);font:inherit}
+.lv.locked{opacity:.55;cursor:not-allowed;background:var(--lock)}
+.num{flex:none;width:44px;height:44px;border-radius:50%;background:var(--pri);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+.locked .num{background:var(--mut)}
+.lv b{display:block}.lv small{color:var(--mut)}
+.st{margin-left:auto;font-size:1.1rem;white-space:nowrap}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:14px}
+.btn{background:var(--pri);color:#fff;border:0;border-radius:12px;padding:12px 18px;font:inherit;font-weight:600;cursor:pointer;width:100%;margin-top:6px}
+.btn:hover{background:var(--priD)}.btn.alt{background:transparent;color:var(--pri);border:1px solid var(--pri)}
+.btn:disabled{opacity:.5;cursor:default}
+.back{background:none;border:0;color:var(--pri);font:inherit;cursor:pointer;padding:4px 0;margin-bottom:6px}
+.voc{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.voc div{border:1px solid var(--bd);border-radius:10px;padding:8px;text-align:center}
+.voc .ar{font-size:1.7rem;display:block;line-height:1.5}.voc small{color:var(--mut)}
+.ex{padding:8px 0;border-bottom:1px dashed var(--bd)}.ex:last-child{border:0}
+.ex .ar{font-size:1.6rem;display:block;text-align:right}
+.note{background:rgba(31,122,90,.1);border-left:4px solid var(--pri);padding:10px 12px;border-radius:8px;margin:10px 0}
+.q{font-size:1.05rem;font-weight:600;margin-bottom:10px}
+.q .ar{font-size:1.5rem}
+.opt{display:block;width:100%;text-align:left;background:var(--card);color:var(--tx);border:2px solid var(--bd);border-radius:12px;padding:12px;margin-bottom:8px;font:inherit;cursor:pointer}
+.opt.ar{text-align:right;font-size:1.4rem}
+.opt.ok{border-color:var(--ok);background:rgba(46,158,91,.15)}.opt.no{border-color:var(--bad);background:rgba(192,57,43,.13)}
+.res{text-align:center}.res .big{font-size:3rem}
+.stars{font-size:1.8rem;letter-spacing:4px}
+.vc{position:relative;cursor:pointer}.sp{position:absolute;top:3px;left:6px;font-style:normal;font-size:.75rem;opacity:.65}.ex{cursor:pointer}.toast{position:fixed;left:16px;right:16px;bottom:calc(20px + env(safe-area-inset-bottom,0px));background:#222;color:#fff;padding:12px 14px;border-radius:12px;font-size:.9rem;text-align:center;z-index:50;opacity:.95}
+.body{margin-top:8px;font-size:.95rem}.body p{margin:6px 0}.tb{width:100%;border-collapse:collapse;margin:8px 0;font-size:.85rem}.tb th,.tb td{border:1px solid var(--bd);padding:6px;text-align:center}.tb th{background:rgba(31,122,90,.12)}.tb .ar{font-size:1.35rem;line-height:1.6}.bad{color:var(--bad)}.good{color:var(--ok)}
+.utoast{position:fixed;left:12px;right:12px;bottom:calc(16px + env(safe-area-inset-bottom,0px));max-width:536px;margin:0 auto;background:#14352a;color:#fff;padding:12px 14px;border-radius:14px;display:flex;gap:8px;align-items:center;z-index:60;box-shadow:0 8px 24px rgba(0,0,0,.35);font-size:.9rem}.utoast span{flex:1}.utoast button{background:#3fbf8f;color:#06231a;border:0;border-radius:10px;padding:8px 12px;font:inherit;font-weight:700;cursor:pointer}.utoast .x{background:transparent;color:#cfe;font-weight:500}
+.foot{text-align:center;color:var(--mut);font-size:.8rem;margin-top:20px}
+.link{background:none;border:0;color:var(--mut);text-decoration:underline;cursor:pointer;font:inherit;font-size:.8rem}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+const PASS=80;
+const JS={0:"📗 Jilid 1 · Dasar",7:"📘 Jilid 2 · Dhamir, Idhafah, Sifat, Jumlah",13:"📙 Jilid 3 · Kata Kerja",27:"📙 Jilid 3 · Lanjutan (Inna, Nashab, Amr Jamak)"};
+const L=[
+{t:"Isim Isyarah: هَذَا",d:"Kata tunjuk “ini” (laki-laki)",
+v:[["كِتَابٌ","buku"],["قَلَمٌ","pena"],["بَابٌ","pintu"],["مَسْجِدٌ","masjid"],["مُدَرِّسٌ","guru"],["طَالِبٌ","siswa"]],
+n:"<b>هَذَا</b> berarti “ini”, dipakai untuk benda/orang berjenis <b>mudzakkar</b> (maskulin). Susunan: هَذَا + nama benda.",
+e:[["هَذَا كِتَابٌ","Ini buku."],["هَذَا مُدَرِّسٌ","Ini seorang guru."],["هَذَا مَسْجِدٌ","Ini masjid."]],
+q:[["Arti هَذَا كِتَابٌ ?",["Ini buku","Itu buku","Ini pena","Itu pintu"],0],["Arti مُدَرِّسٌ ?",["Siswa","Guru","Masjid","Pintu"],1],["“Ini pintu” dalam bahasa Arab:",["هَذَا قَلَمٌ","هَذَا بَابٌ","هَذَا طَالِبٌ","هَذَا مَسْجِدٌ"],1],["Arti قَلَمٌ ?",["Buku","Pintu","Pena","Guru"],2],["هَذَا dipakai untuk benda berjenis...",["Mudzakkar","Muannats","Jamak saja","Pertanyaan"],0]]},
+{t:"Isim Isyarah: هَذِهِ",d:"Kata tunjuk “ini” (perempuan)",
+v:[["مَدْرَسَةٌ","sekolah"],["سَيَّارَةٌ","mobil"],["مَدِينَةٌ","kota"],["غُرْفَةٌ","kamar"],["نَافِذَةٌ","jendela"],["حَقِيبَةٌ","tas"]],
+n:"<b>هَذِهِ</b> berarti “ini” untuk benda berjenis <b>muannats</b> (feminin). Kebanyakan kata muannats berakhiran ta marbuthah (ة).",
+e:[["هَذِهِ مَدْرَسَةٌ","Ini sekolah."],["هَذِهِ سَيَّارَةٌ","Ini mobil."],["هَذِهِ نَافِذَةٌ","Ini jendela."]],
+q:[["هَذِهِ dipakai untuk...",["Mudzakkar","Muannats","Guru","Pertanyaan"],1],["“Ini sekolah” dalam bahasa Arab:",["هَذَا مَدْرَسَةٌ","هَذِهِ مَدْرَسَةٌ","هَذِهِ كِتَابٌ","هَذَا مَسْجِدٌ"],1],["Arti سَيَّارَةٌ ?",["Kota","Kamar","Mobil","Jendela"],2],["Lengkapi: ___ مَدِينَةٌ",["هَذَا","هَذِهِ","هَلْ","مَنْ"],1],["Lengkapi: ___ طَالِبٌ",["هَذِهِ","تِلْكَ","هَذَا","هَلْ"],2]]},
+{t:"Kata Tanya هَلْ",d:"Pertanyaan ya/tidak: نَعَمْ & لَا",
+v:[["هَلْ","apakah"],["نَعَمْ","ya"],["لَا","tidak"],["هَذَا","ini (m)"],["هَذِهِ","ini (f)"],["قَلَمٌ","pena"]],
+n:"<b>هَلْ</b> di awal kalimat membuat pertanyaan ya/tidak. Jawabannya <b>نَعَمْ</b> (ya) atau <b>لَا</b> (tidak).",
+e:[["هَلْ هَذَا كِتَابٌ؟","Apakah ini buku?"],["نَعَمْ، هَذَا كِتَابٌ","Ya, ini buku."],["لَا، هَذَا قَلَمٌ","Bukan, ini pena."]],
+q:[["Arti هَلْ ?",["Siapa","Apa","Apakah","Di mana"],2],["Arti نَعَمْ ?",["Tidak","Ya","Apakah","Ini"],1],["Arti هَلْ هَذِهِ مَدْرَسَةٌ ؟",["Ini sekolah","Apakah ini sekolah?","Apa ini?","Itu sekolah"],1],["Jawaban “tidak” adalah...",["نَعَمْ","هَلْ","لَا","هَذَا"],2],["Ini pena. هَلْ هَذَا قَلَمٌ ؟ Jawabannya:",["لَا، هَذَا قَلَمٌ","نَعَمْ، هَذَا قَلَمٌ","هَلْ هَذَا","نَعَمْ، هَذَا بَابٌ"],1]]},
+{t:"مَا dan مَنْ",d:"Apa ini? Siapa ini?",
+v:[["مَا","apa"],["مَنْ","siapa"],["مُدَرِّسٌ","guru"],["طَالِبٌ","siswa"],["بَابٌ","pintu"],["كِتَابٌ","buku"]],
+n:"<b>مَا</b> = “apa” (untuk benda). <b>مَنْ</b> = “siapa” (untuk orang). Jawaban langsung berupa kalimat dengan هَذَا/هَذِهِ.",
+e:[["مَا هَذَا؟","Apa ini?"],["هَذَا بَابٌ","Ini pintu."],["مَنْ هَذَا؟","Siapa ini?"],["هَذَا مُدَرِّسٌ","Ini guru."]],
+q:[["Arti مَا هَذَا ؟",["Siapa ini?","Apa ini?","Apakah ini?","Itu apa?"],1],["Arti مَنْ هَذَا ؟",["Siapa ini?","Apa ini?","Ya, ini","Ini guru"],0],["مَا هَذَا ؟ Jawaban yang tepat:",["هَذَا مُدَرِّسٌ","هَذَا كِتَابٌ","نَعَمْ","مَنْ"],1],["مَنْ هَذَا ؟ Jawaban yang tepat:",["هَذَا بَابٌ","هَذَا قَلَمٌ","هَذَا طَالِبٌ","لَا"],2],["مَنْ dipakai untuk bertanya tentang...",["Benda","Orang","Waktu","Tempat"],1]]},
+{t:"Alif Lam (ال)",d:"Isim ma’rifah: “…itu / yang tertentu”",
+v:[["الْكِتَابُ","buku itu"],["الْقَلَمُ","pena itu"],["الْبَابُ","pintu itu"],["الْمُدَرِّسُ","guru itu"],["الْمَسْجِدُ","masjid itu"],["الْغُرْفَةُ","kamar itu"]],
+n:"<b>ال</b> di awal kata menjadikannya tertentu (ma’rifah). Tanwin (ـٌ) berubah menjadi dhammah (ـُ): كِتَابٌ ← الْكِتَابُ. Contoh: هَذَا الْكِتَابُ = “buku ini”.",
+e:[["هَذَا الْقَلَمُ","Pena ini."],["هَذِهِ الْمَدْرَسَةُ","Sekolah ini."],["مَنْ هَذَا الطَّالِبُ؟","Siapa siswa ini?"]],
+q:[["ال membuat kata menjadi...",["Tidak tentu","Tertentu","Jamak","Pertanyaan"],1],["Arti الْكِتَابُ ?",["Sebuah buku","Buku itu","Pena itu","Buku-buku"],1],["Bentuk tertentu dari قَلَمٌ :",["قَلَمٌ","الْقَلَمُ","هَذَا قَلَمٌ","قَلَمَانِ"],1],["Arti هَذَا الْقَلَمُ ?",["Ini pena","Pena ini","Itu pena","Apa ini"],1],["“Guru itu” dalam bahasa Arab:",["مُدَرِّسٌ","الْمُدَرِّسُ","هَذَا مُدَرِّسٌ","هَلْ مُدَرِّسٌ"],1]]},
+{t:"ذَلِكَ dan تِلْكَ",d:"Kata tunjuk jauh: “itu”",
+v:[["ذَلِكَ","itu (m)"],["تِلْكَ","itu (f)"],["بَابٌ","pintu"],["مَدْرَسَةٌ","sekolah"],["سَيَّارَةٌ","mobil"],["مَسْجِدٌ","masjid"]],
+n:"<b>ذَلِكَ</b> = “itu” untuk mudzakkar. <b>تِلْكَ</b> = “itu” untuk muannats. Sama seperti هَذَا/هَذِهِ, tetapi untuk yang jauh.",
+e:[["ذَلِكَ بَابٌ","Itu pintu."],["تِلْكَ مَدْرَسَةٌ","Itu sekolah."],["مَا ذَلِكَ؟","Apa itu?"]],
+q:[["Arti ذَلِكَ ?",["Ini (m)","Itu (m)","Itu (f)","Ini (f)"],1],["Arti تِلْكَ ?",["Itu (f)","Itu (m)","Ini (f)","Siapa"],0],["“Itu pintu”:",["تِلْكَ بَابٌ","ذَلِكَ بَابٌ","هَذِهِ بَابٌ","هَذَا بَابٌ"],1],["“Itu sekolah”:",["ذَلِكَ مَدْرَسَةٌ","تِلْكَ مَدْرَسَةٌ","هَذَا مَدْرَسَةٌ","تِلْكَ مَسْجِدٌ"],1],["Arti تِلْكَ سَيَّارَةٌ ?",["Ini mobil","Itu mobil","Itu masjid","Itu pintu"],1]]},
+{t:"Huruf Jar فِي",d:"Preposisi “di / di dalam”",
+v:[["فِي","di / dalam"],["الْحَقِيبَةِ","tas itu"],["الْمَدْرَسَةِ","sekolah itu"],["الْمَسْجِدِ","masjid itu"],["الْغُرْفَةِ","kamar itu"],["الْمَدِينَةِ","kota itu"]],
+n:"<b>فِي</b> = “di/dalam”. Kata sesudahnya berharakat <b>kasrah</b> di akhir (majrur): الْمَسْجِدُ ← فِي الْمَسْجِدِ.",
+e:[["الْكِتَابُ فِي الْحَقِيبَةِ","Buku itu di dalam tas."],["الْمُدَرِّسُ فِي الْمَدْرَسَةِ","Guru itu di sekolah."],["الطَّالِبُ فِي الْغُرْفَةِ","Siswa itu di kamar."]],
+q:[["Arti فِي ?",["Apa","Di / dalam","Siapa","Apakah"],1],["Arti الْكِتَابُ فِي الْحَقِيبَةِ ?",["Buku itu di dalam tas","Tas itu di dalam buku","Ini buku","Apakah buku?"],0],["Harakat akhir kata setelah فِي :",["Dhammah","Fathah","Kasrah","Sukun"],2],["“Guru itu di sekolah”:",["الْمُدَرِّسُ فِي الْمَدْرَسَةِ","الْمُدَرِّسُ فِي الْمَدْرَسَةُ","هَذَا فِي مُدَرِّسٌ","الْمَدْرَسَةُ فِي الْمُدَرِّسِ"],0],["Arti حَقِيبَةٌ ?",["Kamar","Tas","Kota","Jendela"],1]]},
+{t:"Dhamir: أَنَا، أَنْتَ، هُوَ",d:"Kata ganti orang",
+v:[["أَنَا","saya"],["أَنْتَ","kamu (lk)"],["أَنْتِ","kamu (pr)"],["هُوَ","dia (lk)"],["هِيَ","dia (pr)"],["نَحْنُ","kami/kita"]],
+n:"Dhamir munfashil berdiri sendiri: <b>أَنَا</b> saya, <b>أَنْتَ/أَنْتِ</b> kamu (lk/pr), <b>هُوَ/هِيَ</b> dia (lk/pr), <b>نَحْنُ</b> kami.",
+e:[["أَنَا طَالِبٌ","Saya siswa."],["هُوَ مُدَرِّسٌ","Dia (lk) guru."],["هِيَ طَالِبَةٌ","Dia (pr) siswi."]],
+q:[["Arti أَنَا ?",["Kamu","Saya","Dia","Kami"],1],["Arti هِيَ ?",["Dia (lk)","Dia (pr)","Kamu (lk)","Saya"],1],["Arti أَنْتِ ?",["Kamu (pr)","Kamu (lk)","Dia (pr)","Kami"],0],["“Dia (lk) guru”:",["هِيَ مُدَرِّسٌ","هُوَ مُدَرِّسٌ","أَنَا مُدَرِّسٌ","أَنْتِ مُدَرِّسٌ"],1],["Arti نَحْنُ ?",["Mereka","Saya","Kami/kita","Kamu"],2]]},
+{t:"Idhafah (Kata Majemuk)",d:"Kepunyaan: buku siswa",
+v:[["كِتَابُ الطَّالِبِ","buku siswa itu"],["بَابُ الْغُرْفَةِ","pintu kamar"],["قَلَمُ الْمُدَرِّسِ","pena guru"],["سَيَّارَةُ الْمُدَرِّسِ","mobil guru"]],
+n:"<b>Idhafah</b> = dua kata berurutan: kata pertama (mudhaf) tanpa tanwin & tanpa ال; kata kedua (mudhaf ilaih) berharakat <b>kasrah</b>. Contoh: كِتَابٌ + الطَّالِبُ ← كِتَابُ الطَّالِبِ.",
+e:[["هَذَا كِتَابُ الطَّالِبِ","Ini buku siswa itu."],["هَذَا قَلَمُ الْمُدَرِّسِ","Ini pena guru."]],
+q:[["Arti بَابُ الْغُرْفَةِ ?",["Kamar itu pintu","Pintu kamar","Di kamar","Ini pintu"],1],["Harakat akhir mudhaf ilaih:",["Dhammah","Fathah","Kasrah","Sukun"],2],["Mudhaf (kata pertama) tidak boleh memakai...",["ال","Dhammah","Huruf hijaiyah","Harakat"],0],["“Pena guru”:",["قَلَمُ الْمُدَرِّسِ","قَلَمٌ الْمُدَرِّسُ","الْقَلَمُ مُدَرِّسٌ","فِي الْمُدَرِّسِ"],0],["Arti سَيَّارَةُ الْمُدَرِّسِ ?",["Mobil guru","Guru mobil","Sekolah guru","Ini mobil"],0]]},
+{t:"Sifat (Na’at)",d:"Kata sifat: buku baru, sekolah besar",
+v:[["جَدِيدٌ","baru"],["كَبِيرٌ","besar"],["صَغِيرٌ","kecil"],["جَمِيلٌ","indah"]],
+n:"Sifat diletakkan <b>setelah</b> kata yang disifati dan harus sesuai jenisnya (mudzakkar/muannats): كِتَابٌ جَدِيدٌ, tetapi مَدْرَسَةٌ جَدِيدَةٌ. Muannats ditambah ta marbuthah.",
+e:[["هَذَا كِتَابٌ جَدِيدٌ","Ini buku baru."],["هَذِهِ مَدْرَسَةٌ كَبِيرَةٌ","Ini sekolah besar."]],
+q:[["Arti جَدِيدٌ ?",["Besar","Kecil","Baru","Indah"],2],["Posisi sifat terhadap yang disifati:",["Sebelum","Sesudah","Terpisah","Bebas"],1],["“Sekolah besar”:",["مَدْرَسَةٌ كَبِيرٌ","مَدْرَسَةٌ كَبِيرَةٌ","كَبِيرَةٌ مَدْرَسَةٌ","مَدْرَسَةٌ صَغِيرَةٌ"],1],["Arti هَذَا كِتَابٌ جَدِيدٌ ?",["Ini buku baru","Ini buku besar","Itu buku baru","Buku itu baru"],0],["Arti صَغِيرٌ ?",["Besar","Kecil","Baru","Indah"],1]]},
+{t:"Mutsanna (Dua)",d:"Bentuk ganda: dua buku, dua guru",
+v:[["كِتَابَانِ","dua buku"],["قَلَمَانِ","dua pena"],["مُدَرِّسَانِ","dua guru"],["طَالِبَانِ","dua siswa"],["مَدْرَسَتَانِ","dua sekolah"],["سَيَّارَتَانِ","dua mobil"]],
+n:"<b>Mutsanna</b> = dua. Tambahkan <b>ـَانِ</b> (posisi rafa’/subjek) atau <b>ـَيْنِ</b> (nashab/jar) pada kata: كِتَابٌ ← كِتَابَانِ / كِتَابَيْنِ. Pada muannats, ة berubah menjadi ت: مَدْرَسَةٌ ← مَدْرَسَتَانِ. Kata tunjuk “ini” untuk dua: <b>هَذَانِ</b> (m) dan <b>هَاتَانِ</b> (f).",
+e:[["هَذَانِ كِتَابَانِ","Ini dua buku."],["هَاتَانِ مَدْرَسَتَانِ","Ini dua sekolah."],["الطَّالِبَانِ فِي الْغُرْفَةِ","Dua siswa itu di kamar."]],
+q:[["Arti كِتَابَانِ ؟",["Satu buku","Dua buku","Buku-buku","Buku itu"],1],["Bentuk mutsanna dari مُدَرِّسٌ :",["مُدَرِّسُونَ","مُدَرِّسَانِ","مُدَرِّسَةٌ","الْمُدَرِّسُ"],1],["Mutsanna dari مَدْرَسَةٌ :",["مَدْرَسَتَانِ","مَدْرَسَانِ","مَدْرَسَاتٌ","مَدْرَسَةَانِ"],0],["“Ini dua buku” (untuk m):",["هَذَا كِتَابَانِ","هَاتَانِ كِتَابَانِ","هَذَانِ كِتَابَانِ","هَذِهِ كِتَابَانِ"],2],["Akhiran mutsanna posisi rafa’:",["ـَانِ","ـُونَ","ـَاتٌ","ـَةٌ"],0]]},
+{t:"Jamak Salim",d:"Jamak mudzakkar (ـُونَ) & muannats (ـَاتٌ)",
+v:[["مُدَرِّسُونَ","para guru"],["مُسْلِمُونَ","kaum muslimin"],["مُهَنْدِسُونَ","para insinyur"],["طَالِبَاتٌ","para siswi"],["مُسْلِمَاتٌ","muslimah (jamak)"],["مُدَرِّسَاتٌ","para guru (pr)"]],
+n:"<b>Jamak mudzakkar salim</b>: tambah <b>ـُونَ</b> (rafa’) atau <b>ـِينَ</b> (nashab/jar): مُدَرِّسٌ ← مُدَرِّسُونَ. <b>Jamak muannats salim</b>: buang ة lalu tambah <b>ـَاتٌ</b>: طَالِبَةٌ ← طَالِبَاتٌ. Untuk jamak, “mereka” adalah <b>هُمْ</b> (m) dan <b>هُنَّ</b> (f).",
+e:[["الْمُسْلِمُونَ فِي الْمَسْجِدِ","Kaum muslimin di masjid."],["الطَّالِبَاتُ فِي الْمَدْرَسَةِ","Para siswi di sekolah."],["هُمْ مُدَرِّسُونَ","Mereka (lk) guru."]],
+q:[["Jamak salim dari مُسْلِمٌ :",["مُسْلِمَانِ","مُسْلِمُونَ","مُسْلِمَاتٌ","الْمُسْلِمُ"],1],["Jamak muannats salim dari طَالِبَةٌ :",["طَالِبَاتٌ","طَالِبُونَ","طَالِبَانِ","طَالِبَتَانِ"],0],["Arti هُمْ ؟",["Dia (lk)","Mereka (lk)","Mereka (pr)","Kami"],1],["Arti مُهَنْدِسُونَ ؟",["Dua insinyur","Insinyur itu","Para insinyur","Para guru"],2],["Akhiran jamak mudzakkar salim (rafa’):",["ـَانِ","ـُونَ","ـَاتٌ","ـَةٌ"],1]]},
+{t:"Angka 1–10",d:"Bilangan dasar",
+v:[["وَاحِدٌ","satu (1)"],["اثْنَانِ","dua (2)"],["ثَلَاثَةٌ","tiga (3)"],["أَرْبَعَةٌ","empat (4)"],["خَمْسَةٌ","lima (5)"],["عَشَرَةٌ","sepuluh (10)"]],
+n:"Angka 1–2 mengikuti benda yang dihitung. Angka 3–10 memakai bentuk berakhiran ة untuk benda mudzakkar (lawan jenis bendanya), dan benda yang dihitung berbentuk jamak. Lanjutan: سِتَّةٌ (6), سَبْعَةٌ (7), ثَمَانِيَةٌ (8), تِسْعَةٌ (9).",
+e:[["فِي الْغُرْفَةِ ثَلَاثَةُ طُلَّابٍ","Di kamar ada tiga siswa."],["هَذَا كِتَابٌ وَاحِدٌ","Ini satu buku."]],
+q:[["Arti ثَلَاثَةٌ ؟",["Dua","Tiga","Empat","Lima"],1],["Arti عَشَرَةٌ ؟",["Sepuluh","Sembilan","Delapan","Satu"],0],["Angka 5 dalam bahasa Arab:",["أَرْبَعَةٌ","خَمْسَةٌ","سِتَّةٌ","ثَلَاثَةٌ"],1],["Arti اثْنَانِ ؟",["Satu","Dua","Tiga","Empat"],1],["Arti هَذَا كِتَابٌ وَاحِدٌ ؟",["Ini dua buku","Ini satu buku","Ini buku baru","Itu satu buku"],1]]},
+{t:"Fi’il Madhi",d:"Kata kerja lampau",
+v:[["كَتَبَ","dia menulis"],["ذَهَبَ","dia pergi"],["دَرَسَ","dia belajar"],["فَتَحَ","dia membuka"]],
+n:"<b>Fi’il madhi</b> menunjukkan perbuatan yang sudah terjadi. Bentuk dasarnya (dia lk) berakhiran fathah: كَتَبَ. Untuk “dia pr” ditambah ت: كَتَبَتْ.",
+e:[["كَتَبَ الطَّالِبُ","Siswa itu menulis."],["ذَهَبَ الْمُدَرِّسُ إِلَى الْمَسْجِدِ","Guru pergi ke masjid."]],
+q:[["Arti كَتَبَ ?",["Dia pergi","Dia menulis","Dia belajar","Dia membuka"],1],["Fi’il madhi menunjukkan waktu...",["Lampau","Sekarang","Akan datang","Perintah"],0],["Arti ذَهَبَ ?",["Dia pergi","Dia menulis","Dia duduk","Dia masuk"],0],["“Dia (pr) menulis”:",["كَتَبَ","كَتَبَتْ","يَكْتُبُ","اُكْتُبْ"],1],["Arti دَرَسَ ?",["Dia belajar","Dia membuka","Dia pergi","Dia menulis"],0]]},
+{t:"Fi’il Mudhari’",d:"Kata kerja sekarang/akan datang",
+v:[["يَكْتُبُ","dia menulis/akan menulis"],["يَذْهَبُ","dia pergi/akan pergi"],["يَدْرُسُ","dia belajar"],["يَفْتَحُ","dia membuka"]],
+n:"<b>Fi’il mudhari’</b> menunjukkan perbuatan yang sedang/akan terjadi. Diawali huruf mudhara’ah; untuk “dia lk” diawali <b>ي</b>: كَتَبَ ← يَكْتُبُ. Untuk “dia pr” diawali <b>ت</b>: تَكْتُبُ.",
+e:[["يَكْتُبُ الطَّالِبُ","Siswa itu menulis."],["يَدْرُسُ فِي الْمَدْرَسَةِ","Dia belajar di sekolah."]],
+q:[["Mudhari’ dari كَتَبَ :",["كَتَبَتْ","يَكْتُبُ","اُكْتُبْ","كَاتِبٌ"],1],["Mudhari’ menunjukkan waktu...",["Sekarang/akan datang","Lampau saja","Perintah saja","Tidak ada"],0],["Arti يَذْهَبُ ?",["Dia pergi/akan pergi","Dia pernah pergi","Pergilah","Apakah pergi"],0],["Awalan mudhari’ untuk “dia lk”:",["ت","ي","أ","ن"],1],["Arti يَفْتَحُ ?",["Dia membuka","Dia menulis","Dia belajar","Dia duduk"],0]]},
+{t:"Fi’il Amr (Perintah)",d:"Kata kerja perintah",
+v:[["اُكْتُبْ","tulislah!"],["اِفْتَحْ","bukalah!"],["اِجْلِسْ","duduklah!"],["اُدْخُلْ","masuklah!"]],
+n:"<b>Fi’il amr</b> dipakai untuk memerintah. Dibentuk dari mudhari’ dengan membuang huruf awal, lalu akhirnya disukun: يَكْتُبُ ← اُكْتُبْ.",
+e:[["اِفْتَحِ الْبَابَ","Bukalah pintu!"],["اُكْتُبْ يَا طَالِبُ","Tulislah, wahai siswa!"]],
+q:[["Arti اُكْتُبْ ?",["Dia menulis","Tulislah!","Dia akan menulis","Penulis"],1],["Arti اِجْلِسْ ?",["Berdirilah","Masuklah","Duduklah","Bukalah"],2],["Fi’il amr dipakai untuk...",["Memerintah","Bertanya","Menceritakan masa lalu","Menunjuk"],0],["“Masuklah!”:",["اُدْخُلْ","دَخَلَ","يَدْخُلُ","دَاخِلٌ"],0],["Arti اِفْتَحْ ?",["Bukalah!","Tutuplah!","Tulislah!","Duduklah!"],0]]},
+{t:"Isim Maushul",d:"Kata sambung: yang",
+v:[["الَّذِي","yang (m)"],["الَّتِي","yang (f)"],["كَتَبَ","dia menulis"],["ذَهَبَ","dia pergi"],["نَجَحَ","dia berhasil"],["مُجْتَهِدٌ","rajin"]],
+n:"<b>الَّذِي</b> = “yang” untuk mudzakkar, <b>الَّتِي</b> = “yang” untuk muannats. Dipakai menyambung kalimat: kata sebelumnya (shilah) menjelaskan benda/orang yang disebut.",
+e:[["هَذَا الطَّالِبُ الَّذِي نَجَحَ","Ini siswa yang berhasil."],["هَذِهِ الْمَدْرَسَةُ الَّتِي فِي الْمَدِينَةِ","Ini sekolah yang ada di kota."]],
+q:[["Arti الَّذِي ؟",["Yang (m)","Yang (f)","Apa","Siapa"],0],["Arti الَّتِي ؟",["Yang (m)","Yang (f)","Itu","Ini"],1],["Lengkapi: هَذَا الطَّالِبُ ___ نَجَحَ",["الَّتِي","الَّذِي","هَذِهِ","هَلْ"],1],["Lengkapi: هَذِهِ الْمَدْرَسَةُ ___ فِي الْمَدِينَةِ",["الَّذِي","الَّتِي","ذَلِكَ","مَنْ"],1],["Arti نَجَحَ ؟",["Dia gagal","Dia berhasil","Dia pergi","Dia menulis"],1]]},
+{t:"Kana (كَانَ)",d:"“Adalah / dulu adalah”",
+v:[["كَانَ","dulu adalah (m)"],["كَانَتْ","dulu adalah (f)"],["مُجْتَهِدًا","rajin (khabar)"],["كَبِيرَةً","besar (khabar f)"],["الطَّالِبُ","siswa itu"],["الْمَدْرَسَةُ","sekolah itu"]],
+n:"<b>كَانَ</b> masuk pada kalimat nominal. Isimnya tetap marfu’ (dhammah), sedangkan khabarnya menjadi <b>manshub</b> (fathah/tanwin fathah): الطَّالِبُ مُجْتَهِدٌ ← كَانَ الطَّالِبُ مُجْتَهِدًا. Untuk muannats: <b>كَانَتْ</b>.",
+e:[["كَانَ الطَّالِبُ مُجْتَهِدًا","Siswa itu (dulu) rajin."],["كَانَتِ الْمَدْرَسَةُ كَبِيرَةً","Sekolah itu (dulu) besar."]],
+q:[["Arti كَانَ ؟",["Dulu adalah","Apakah","Di dalam","Yang"],0],["Harakat khabar setelah كَانَ :",["Manshub","Majrur","Sukun","Marfu’ saja"],0],["“Siswa itu dulu rajin”:",["كَانَ الطَّالِبُ مُجْتَهِدًا","كَانَتِ الطَّالِبُ مُجْتَهِدٌ","الطَّالِبُ كَانَ فِي","هَذَا الطَّالِبُ"],0],["Untuk subjek muannats dipakai...",["كَانَ","كَانَتْ","كَانُوا","يَكُونُ"],1],["Arti كَانَتِ الْمَدْرَسَةُ كَبِيرَةً ؟",["Sekolah itu dulu besar","Sekolah itu kecil","Ini sekolah besar","Apakah sekolah besar?"],0]]},
+{t:"Huruf Jar: مِنْ، إِلَى، عَلَى",d:"Dari, ke, di atas",
+v:[["مِنْ","dari"],["إِلَى","ke"],["عَلَى","di atas / pada"],["مَكْتَبٌ","meja"],["بَيْتٌ","rumah"],["إِنْدُونِيسِيَا","Indonesia"]],
+n:"Huruf jar menjadikan kata sesudahnya <b>majrur</b> (berakhiran kasrah): <b>مِنْ</b> = dari, <b>إِلَى</b> = ke, <b>عَلَى</b> = di atas/pada, <b>فِي</b> = di dalam. Contoh: الْمَكْتَبُ ← عَلَى الْمَكْتَبِ.",
+e:[["أَنَا مِنْ إِنْدُونِيسِيَا","Saya dari Indonesia."],["الْكِتَابُ عَلَى الْمَكْتَبِ","Buku itu di atas meja."],["ذَهَبَ الطَّالِبُ إِلَى الْمَدْرَسَةِ","Siswa itu pergi ke sekolah."]],
+q:[["Arti مِنْ ؟",["Dari","Ke","Di atas","Siapa"],0],["Arti إِلَى ؟",["Dari","Di dalam","Ke","Apakah"],2],["“Buku itu di atas meja”:",["الْكِتَابُ فِي الْمَكْتَبِ","الْكِتَابُ عَلَى الْمَكْتَبِ","الْكِتَابُ مِنَ الْمَكْتَبِ","الْكِتَابُ إِلَى الْمَكْتَبِ"],1],["“Saya dari Indonesia”:",["أَنَا إِلَى إِنْدُونِيسِيَا","أَنَا عَلَى إِنْدُونِيسِيَا","أَنَا مِنْ إِنْدُونِيسِيَا","هُوَ فِي إِنْدُونِيسِيَا"],2],["Harakat akhir kata setelah huruf jar:",["Dhammah","Kasrah","Fathah","Sukun"],1]]},
+{t:"Mudhari’ untuk Semua Pelaku",d:"Saya, kamu, kami menulis",
+v:[["أَكْتُبُ","saya menulis"],["تَكْتُبُ","kamu (lk) menulis"],["يَكْتُبُ","dia (lk) menulis"],["تَكْتُبُ","dia (pr) menulis"],["نَكْتُبُ","kami menulis"],["نَدْرُسُ","kami belajar"]],
+n:"Awalan mudhari’ mengikuti pelakunya: <b>أ</b> = saya, <b>ن</b> = kami, <b>ت</b> = kamu / dia (pr), <b>ي</b> = dia (lk). Akar kata tetap sama: كتب ← أَكْتُبُ، نَكْتُبُ، تَكْتُبُ، يَكْتُبُ.",
+e:[["أَنَا أَكْتُبُ الدَّرْسَ","Saya menulis pelajaran."],["نَحْنُ نَدْرُسُ فِي الْمَدْرَسَةِ","Kami belajar di sekolah."],["أَذْهَبُ إِلَى الْمَسْجِدِ","Saya pergi ke masjid."]],
+q:[["Arti أَكْتُبُ ؟",["Dia menulis","Saya menulis","Kami menulis","Tulislah"],1],["Awalan mudhari’ untuk “kami”:",["أ","ي","ن","ت"],2],["“Kami belajar”:",["أَدْرُسُ","نَدْرُسُ","يَدْرُسُ","دَرَسَ"],1],["“Kamu (lk) membuka”:",["تَفْتَحُ","أَفْتَحُ","نَفْتَحُ","فَتَحَ"],0],["Arti أَذْهَبُ إِلَى الْمَدْرَسَةِ ؟",["Saya pergi ke sekolah","Dia pergi ke sekolah","Kami di sekolah","Pergilah ke sekolah"],0]]},
+{t:"Jamak Taksir",d:"Jamak tidak beraturan",
+v:[["كُتُبٌ","buku-buku"],["أَقْلَامٌ","pena-pena"],["طُلَّابٌ","para siswa"],["مَدَارِسُ","sekolah-sekolah"],["أَبْوَابٌ","pintu-pintu"],["مَسَاجِدُ","masjid-masjid"]],
+n:"<b>Jamak taksir</b> mengubah susunan huruf/harakat kata tunggalnya, jadi harus dihafal polanya: كِتَابٌ ← كُتُبٌ، قَلَمٌ ← أَقْلَامٌ، مَدْرَسَةٌ ← مَدَارِسُ، مَسْجِدٌ ← مَسَاجِدُ.",
+e:[["هَذِهِ كُتُبٌ جَدِيدَةٌ","Ini buku-buku baru."],["الطُّلَّابُ فِي الْمَدَارِسِ","Para siswa di sekolah-sekolah."],["فِي الْمَدِينَةِ مَسَاجِدُ كَثِيرَةٌ","Di kota ada banyak masjid."]],
+q:[["Jamak taksir dari كِتَابٌ :",["كِتَابَانِ","كُتُبٌ","كَاتِبُونَ","كِتَابَةٌ"],1],["Arti أَقْلَامٌ ؟",["Dua pena","Pena itu","Pena-pena","Penulis"],2],["Jamak taksir dari مَدْرَسَةٌ :",["مَدْرَسَاتٌ","مَدَارِسُ","مَدْرَسَتَانِ","مَدْرَسُونَ"],1],["Arti طُلَّابٌ ؟",["Siswa itu","Dua siswa","Para siswa","Siswi"],2],["Ciri jamak taksir:",["Hanya menambah ـُونَ","Bentuk kata berubah dan perlu dihafal","Selalu berakhiran ـَانِ","Selalu ada ال"],1]]},
+{t:"Fi’il Nahi (Larangan)",d:"Jangan menulis, jangan masuk",
+v:[["لَا تَكْتُبْ","jangan menulis"],["لَا تَدْخُلْ","jangan masuk"],["لَا تَجْلِسْ","jangan duduk"],["لَا تَذْهَبْ","jangan pergi"],["لَا تَفْتَحْ","jangan membuka"],["لَا","jangan / tidak"]],
+n:"<b>Nahi</b> = larangan: <b>لَا</b> + mudhari’ yang akhirnya disukun (majzum). Contoh: تَكْتُبُ ← لَا تَكْتُبْ. Bedakan: <b>amr</b> memerintah (اُكْتُبْ), <b>nahi</b> melarang (لَا تَكْتُبْ).",
+e:[["لَا تَدْخُلِ الْغُرْفَةَ","Jangan masuk kamar."],["لَا تَجْلِسْ هُنَا","Jangan duduk di sini."],["لَا تَذْهَبْ إِلَى الْمَدْرَسَةِ","Jangan pergi ke sekolah."]],
+q:[["Arti لَا تَكْتُبْ ؟",["Tulislah","Jangan menulis","Dia menulis","Apakah menulis"],1],["Arti لَا تَدْخُلْ ؟",["Masuklah","Jangan masuk","Jangan duduk","Dia masuk"],1],["“Jangan duduk”:",["اِجْلِسْ","لَا تَجْلِسْ","يَجْلِسُ","جَلَسَ"],1],["Akhir fi’il setelah لَا nahi:",["Dhammah","Sukun","Kasrah","Tanwin"],1],["Perbedaan nahi dan amr:",["Nahi melarang, amr memerintah","Nahi memerintah, amr melarang","Keduanya bertanya","Tidak ada beda"],0]]},
+{t:"Hari dalam Seminggu",d:"Nama hari, kemarin, hari ini, besok",
+v:[["الْأَحَدُ","Ahad (Minggu)"],["الِاثْنَيْنِ","Senin"],["الثُّلَاثَاءُ","Selasa"],["الْأَرْبِعَاءُ","Rabu"],["الْخَمِيسُ","Kamis"],["الْجُمُعَةُ","Jumat"],["السَّبْتُ","Sabtu"],["الْيَوْمُ","hari ini"],["غَدًا","besok"],["أَمْسِ","kemarin"]],
+n:"Untuk menanyakan hari: <b>مَا الْيَوْمُ؟</b> (Hari apa sekarang?). Jawab: <b>الْيَوْمُ يَوْمُ …</b> Urutan hari: الْأَحَدُ، الِاثْنَيْنِ، الثُّلَاثَاءُ، الْأَرْبِعَاءُ، الْخَمِيسُ، الْجُمُعَةُ، السَّبْتُ. <b>يَوْمٌ</b> = hari.",
+e:[["مَا الْيَوْمُ؟","Hari apa sekarang?"],["الْيَوْمُ يَوْمُ الْجُمُعَةِ","Hari ini hari Jumat."],["غَدًا يَوْمُ السَّبْتِ","Besok hari Sabtu."],["أَمْسِ كَانَ يَوْمَ الْخَمِيسِ","Kemarin hari Kamis."]],
+q:[["Arti مَا الْيَوْمُ ؟",["Jam berapa sekarang?","Hari apa sekarang?","Siapa itu?","Apa ini?"],1],["Arti الْجُمُعَةُ ?",["Kamis","Sabtu","Jumat","Rabu"],2],["Arti الْخَمِيسُ ?",["Kamis","Jumat","Senin","Selasa"],0],["Arti غَدًا ?",["Kemarin","Hari ini","Besok","Lusa"],2],["Arti أَمْسِ ?",["Besok","Kemarin","Hari ini","Sekarang"],1]]},
+{t:"Jam (Waktu)",d:"Menanyakan dan menyebut jam",
+v:[["السَّاعَةُ","jam"],["الْوَاحِدَةُ","pertama (1)"],["الثَّانِيَةُ","kedua (2)"],["الثَّالِثَةُ","ketiga (3)"],["النِّصْفُ","setengah"],["الرُّبْعُ","seperempat"]],
+n:"Tanya jam: <b>مَا السَّاعَةُ؟</b> Jawab: <b>السَّاعَةُ</b> + bilangan urutan muannats: الْوَاحِدَةُ (1), الثَّانِيَةُ (2), الثَّالِثَةُ (3), الرَّابِعَةُ (4), الْخَامِسَةُ (5). Tambahan: <b>وَالنِّصْفُ</b> (lewat setengah), <b>وَالرُّبْعُ</b> (lewat seperempat), <b>إِلَّا رُبْعًا</b> (kurang seperempat).",
+e:[["مَا السَّاعَةُ؟","Jam berapa sekarang?"],["السَّاعَةُ الثَّالِثَةُ","Jam tiga."],["السَّاعَةُ الثَّانِيَةُ وَالنِّصْفُ","Jam dua setengah (2.30)."],["السَّاعَةُ الْخَامِسَةُ إِلَّا رُبْعًا","Jam lima kurang seperempat (4.45)."]],
+q:[["Arti مَا السَّاعَةُ ؟",["Hari apa sekarang?","Jam berapa sekarang?","Siapa ini?","Apakah ini jam?"],1],["Arti السَّاعَةُ الثَّالِثَةُ ?",["Jam dua","Jam tiga","Jam empat","Jam satu"],1],["Arti وَالنِّصْفُ ?",["Lewat setengah","Kurang seperempat","Tepat","Lewat seperempat"],0],["Arti السَّاعَةُ الثَّانِيَةُ وَالنِّصْفُ ?",["Jam 2.15","Jam 2.30","Jam 3.30","Jam 1.30"],1],["Arti إِلَّا رُبْعًا ?",["Lewat seperempat","Kurang seperempat","Setengah","Tepat waktu"],1]]},
+{t:"Percakapan: Salam",d:"Salam, kabar, dan ucapan sehari-hari",
+v:[["السَّلَامُ عَلَيْكُمْ","salam sejahtera atasmu"],["وَعَلَيْكُمُ السَّلَامُ","jawaban salam"],["صَبَاحُ الْخَيْرِ","selamat pagi"],["شُكْرًا","terima kasih"],["عَفْوًا","sama-sama / maaf"],["مَعَ السَّلَامَةِ","selamat tinggal"]],
+n:"Salam dijawab dengan <b>وَعَلَيْكُمُ السَّلَامُ</b>. Salam pagi <b>صَبَاحُ الْخَيْرِ</b> dijawab <b>صَبَاحُ النُّورِ</b>. Menanyakan kabar: <b>كَيْفَ حَالُكَ؟</b> (kepada lk) / <b>كَيْفَ حَالُكِ؟</b> (kepada pr). Jawab: <b>أَنَا بِخَيْرٍ، الْحَمْدُ لِلَّهِ</b>.",
+e:[["كَيْفَ حَالُكَ؟","Apa kabarmu?"],["أَنَا بِخَيْرٍ، الْحَمْدُ لِلَّهِ","Saya baik, alhamdulillah."],["شُكْرًا، مَعَ السَّلَامَةِ","Terima kasih, selamat tinggal."]],
+q:[["Jawaban السَّلَامُ عَلَيْكُمْ :",["شُكْرًا","وَعَلَيْكُمُ السَّلَامُ","مَعَ السَّلَامَةِ","عَفْوًا"],1],["Arti كَيْفَ حَالُكَ ؟",["Siapa namamu?","Apa kabarmu?","Dari mana kamu?","Jam berapa?"],1],["Arti شُكْرًا ?",["Maaf","Selamat pagi","Terima kasih","Selamat tinggal"],2],["Jawaban صَبَاحُ الْخَيْرِ :",["صَبَاحُ النُّورِ","مَسَاءُ الْخَيْرِ","مَعَ السَّلَامَةِ","هَلْ"],0],["Arti مَعَ السَّلَامَةِ ?",["Selamat datang","Selamat tinggal","Selamat pagi","Terima kasih"],1]]},
+{t:"Percakapan: Perkenalan",d:"Nama, asal, tempat tinggal",
+v:[["مَا اسْمُكَ؟","siapa namamu?"],["اِسْمِي","namaku"],["مِنْ أَيْنَ؟","dari mana?"],["أَيْنَ","di mana"],["أَسْكُنُ","saya tinggal"],["تَشَرَّفْنَا","senang bertemu"]],
+n:"Nama: <b>مَا اسْمُكَ؟</b> → <b>اِسْمِي …</b>. Asal: <b>مِنْ أَيْنَ أَنْتَ؟</b> → <b>أَنَا مِنْ …</b>. Tempat tinggal: <b>أَيْنَ تَسْكُنُ؟</b> → <b>أَسْكُنُ فِي …</b>. Akhiran <b>ـكَ</b> = milikmu (lk), <b>ـكِ</b> = milikmu (pr), <b>ـِي</b> = milikku.",
+e:[["مَا اسْمُكَ؟ — اِسْمِي أَحْمَدُ","Siapa namamu? — Namaku Ahmad."],["مِنْ أَيْنَ أَنْتَ؟ — أَنَا مِنْ إِنْدُونِيسِيَا","Dari mana kamu? — Saya dari Indonesia."],["أَيْنَ تَسْكُنُ؟ — أَسْكُنُ فِي جَاكْرْتَا","Di mana kamu tinggal? — Saya tinggal di Jakarta."]],
+q:[["Arti مَا اسْمُكَ ؟",["Dari mana kamu?","Siapa namamu?","Apa kabarmu?","Di mana rumahmu?"],1],["Arti اِسْمِي أَحْمَدُ ?",["Namaku Ahmad","Namamu Ahmad","Dia Ahmad","Ahmad guru"],0],["Arti مِنْ أَيْنَ أَنْتَ ؟",["Siapa kamu?","Dari mana kamu?","Kamu ke mana?","Apa itu?"],1],["Arti أَسْكُنُ فِي جَاكْرْتَا ?",["Saya dari Jakarta","Saya tinggal di Jakarta","Dia di Jakarta","Ke Jakarta"],1],["Akhiran ـِي pada اِسْمِي berarti...",["Milikku","Milikmu","Milik dia","Milik kami"],0]]},
+{t:"Percakapan: Jual Beli",d:"Menawar, bertanya harga",
+v:[["بِكَمْ؟","berapa harganya?"],["أُرِيدُ","saya ingin"],["غَالِيٌ","mahal"],["رَخِيصٌ","murah"],["تَفَضَّلْ","silakan"],["السِّعْرُ","harga"]],
+n:"Tanya harga: <b>بِكَمْ هَذَا؟</b>. Menyatakan keinginan: <b>أُرِيدُ</b> + benda manshub (tanwin fathah): أُرِيدُ كِتَابًا. Komentar harga: <b>هَذَا غَالِيٌ</b> (mahal) / <b>هَذَا رَخِيصٌ</b> (murah).",
+e:[["أُرِيدُ كِتَابًا جَدِيدًا","Saya ingin buku baru."],["بِكَمْ هَذَا الْقَلَمُ؟","Berapa harga pena ini?"],["هَذَا رَخِيصٌ، تَفَضَّلْ","Ini murah, silakan."]],
+q:[["Arti بِكَمْ هَذَا ؟",["Apa ini?","Berapa harga ini?","Siapa ini?","Ini baru"],1],["Arti أُرِيدُ قَلَمًا ?",["Saya ingin pena","Ini pena","Dia punya pena","Pena itu mahal"],0],["Arti غَالِيٌ ?",["Murah","Mahal","Baru","Besar"],1],["Arti رَخِيصٌ ?",["Murah","Mahal","Kecil","Indah"],0],["Arti تَفَضَّلْ ?",["Terima kasih","Silakan","Selamat tinggal","Jangan"],1]]},
+{t:"Inna (إِنَّ) dan Saudaranya",d:"Sesungguhnya, tetapi, andaikan",
+v:[["إِنَّ","sesungguhnya"],["لَكِنَّ","tetapi"],["لَيْتَ","andaikan"],["الطَّالِبَ","siswa itu (manshub)"],["الْعِلْمَ","ilmu (manshub)"],["نَافِعٌ","bermanfaat"]],
+n:"<b>إِنَّ</b> dan saudaranya (<b>لَكِنَّ</b>, <b>لَيْتَ</b>) masuk pada kalimat nominal: <b>isimnya menjadi manshub</b> (fathah), sedangkan <b>khabarnya tetap marfu’</b> (dhammah). Contoh: الطَّالِبُ مُجْتَهِدٌ ← إِنَّ الطَّالِبَ مُجْتَهِدٌ.",
+e:[["إِنَّ الْعِلْمَ نَافِعٌ","Sesungguhnya ilmu itu bermanfaat."],["إِنَّ الطَّالِبَ مُجْتَهِدٌ","Sesungguhnya siswa itu rajin."],["لَكِنَّ الْكِتَابَ غَالٍ","Tetapi buku itu mahal."]],
+q:[["Arti إِنَّ ؟",["Sesungguhnya","Apakah","Ke","Dulu adalah"],0],["Setelah إِنَّ, isimnya menjadi...",["Marfu’","Manshub","Majrur","Sukun"],1],["“Sesungguhnya ilmu itu bermanfaat”:",["إِنَّ الْعِلْمُ نَافِعٌ","إِنَّ الْعِلْمَ نَافِعٌ","إِنَّ الْعِلْمِ نَافِعٌ","كَانَ الْعِلْمَ نَافِعٌ"],1],["Khabar setelah إِنَّ berharakat...",["Dhammah (marfu’)","Fathah","Kasrah","Selalu sukun"],0],["Arti لَكِنَّ ؟",["Tetapi","Andaikan","Sesungguhnya","Siapa"],0]]},
+{t:"لَنْ dan أَنْ",d:"Menashabkan fi’il mudhari’",
+v:[["لَنْ","tidak akan"],["أَنْ","agar / untuk"],["يَذْهَبَ","pergi (manshub)"],["أَكْتُبَ","saya menulis (manshub)"],["أَفْتَحَ","saya membuka (manshub)"],["أُرِيدُ","saya ingin"]],
+n:"<b>لَنْ</b> dan <b>أَنْ</b> menashabkan fi’il mudhari’: akhir fi’il berharakat <b>fathah</b>: يَذْهَبُ ← لَنْ يَذْهَبَ. <b>لَنْ</b> = “tidak akan”; <b>أَنْ</b> = “agar/untuk”: أُرِيدُ أَنْ أَكْتُبَ = “saya ingin menulis”.",
+e:[["لَنْ يَذْهَبَ الطَّالِبُ","Siswa itu tidak akan pergi."],["أُرِيدُ أَنْ أَكْتُبَ","Saya ingin menulis."],["لَنْ أَفْتَحَ الْبَابَ","Saya tidak akan membuka pintu."]],
+q:[["Arti لَنْ ؟",["Tidak akan","Apakah","Sudah","Ke"],0],["Harakat akhir mudhari’ setelah لَنْ :",["Dhammah","Fathah","Kasrah","Sukun"],1],["“Saya ingin menulis”:",["أُرِيدُ أَكْتُبُ","أُرِيدُ أَنْ أَكْتُبَ","أُرِيدُ لَنْ أَكْتُبُ","كَتَبْتُ أَنْ"],1],["Arti لَنْ يَذْهَبَ ؟",["Dia tidak akan pergi","Dia pergi","Pergilah","Dia sudah pergi"],0],["Lengkapi: لَنْ ___ الطَّالِبُ",["يَذْهَبُ","يَذْهَبَ","ذَهَبَ","اِذْهَبْ"],1]]},
+{t:"Amr dan Nahi Jamak",d:"Perintah & larangan untuk banyak orang",
+v:[["اُكْتُبُوا","tulislah (kalian)"],["اِفْتَحُوا","bukalah (kalian)"],["اُدْخُلُوا","masuklah (kalian)"],["لَا تَكْتُبُوا","jangan menulis (kalian)"],["لَا تَدْخُلُوا","jangan masuk (kalian)"],["يَا طُلَّابُ","wahai para siswa"]],
+n:"Untuk memerintah/melarang <b>banyak laki-laki</b>, tambahkan <b>ـُوا</b> (dhammah + waw + alif) di akhir fi’il: اُكْتُبْ ← <b>اُكْتُبُوا</b>; لَا تَكْتُبْ ← <b>لَا تَكْتُبُوا</b>.",
+e:[["يَا طُلَّابُ اُكْتُبُوا الدَّرْسَ","Wahai para siswa, tulislah pelajaran!"],["لَا تَدْخُلُوا الْغُرْفَةَ","Jangan masuk kamar (kalian)!"],["اِفْتَحُوا الْكُتُبَ","Bukalah buku-buku!"]],
+q:[["Arti اُكْتُبُوا ؟",["Tulislah (kalian)","Jangan menulis","Dia menulis","Penulis"],0],["“Jangan masuk (kalian)”:",["لَا تَدْخُلْ","لَا تَدْخُلُوا","اُدْخُلُوا","دَخَلُوا"],1],["Tambahan akhiran untuk amr/nahi jamak lk:",["ـَانِ","ـُوا","ـَاتٌ","ـَةٌ"],1],["Arti لَا تَكْتُبُوا ؟",["Tulislah (kalian)","Jangan menulis (kalian)","Mereka menulis","Saya menulis"],1],["Arti اِفْتَحُوا ؟",["Bukalah (kalian)","Tutuplah (kalian)","Jangan buka","Dia membuka"],0]]}
+];
+
+const DEEP={
+0:{
+v:[["كِتَابٌ","buku"],["قَلَمٌ","pena"],["بَابٌ","pintu"],["مَسْجِدٌ","masjid"],["مُدَرِّسٌ","guru"],["طَالِبٌ","siswa"],["كُرْسِيٌّ","kursi"],["مَكْتَبٌ","meja"],["بَيْتٌ","rumah"],["وَلَدٌ","anak laki-laki"],["رَجُلٌ","laki-laki dewasa"],["دَفْتَرٌ","buku tulis"]],
+n:"<b>هَذَا</b> berarti “ini”. Dipakai untuk menunjuk satu benda atau orang yang <b>dekat</b> dan berjenis <b>mudzakkar</b> (maskulin). Pola kalimatnya: <b>هَذَا + nama benda</b>. Dalam bahasa Arab kata “adalah” tidak perlu diucapkan.",
+x:[
+["1. Mudzakkar itu apa?","<p>Dalam bahasa Arab setiap benda punya jenis: <b>mudzakkar</b> (maskulin) atau <b>muannats</b> (feminin). Jenis ini tidak selalu mengikuti logika bahasa Indonesia, jadi perlu dihafal bersama kosakatanya.</p><p>Ciri paling mudah: kata mudzakkar <b>tidak berakhiran ة</b> (ta marbuthah), contohnya كِتَابٌ، قَلَمٌ، بَابٌ. Karena itu dipakai <b>هَذَا</b>. Untuk kata berakhiran ة dipakai هَذِهِ (Level 2).</p>"],
+["2. Susunan kalimat","<table class='tb'><tr><th>Kata tunjuk</th><th>Nama benda</th><th>Artinya</th></tr><tr><td class='ar'>هَذَا</td><td class='ar'>كِتَابٌ</td><td>Ini buku</td></tr><tr><td class='ar'>هَذَا</td><td class='ar'>مُدَرِّسٌ</td><td>Ini guru</td></tr><tr><td class='ar'>هَذَا</td><td class='ar'>كُرْسِيٌّ</td><td>Ini kursi</td></tr></table><p>Urutannya selalu <b>kata tunjuk dulu, lalu bendanya</b>. Tidak ada kata “adalah” (hanya tersirat).</p>"],
+["3. Tanwin (ـٌ)","<p>Akhiran <b>ـٌ</b> disebut <b>tanwin</b> (dua dhammah) dan dibaca “-un”. Artinya benda itu <b>tidak tertentu</b> (seperti “sebuah/suatu”). Jadi هَذَا كِتَابٌ dibaca <i>hādzā kitābun</i> = “ini sebuah buku”.</p><p>Di Level 5 kamu akan belajar membuatnya <b>tertentu</b> (“buku itu”) dengan ال.</p>"],
+["4. Cara membaca","<p><b>هَذَا</b> dibaca <i>hādzā</i>: huruf ه jelas, ذ seperti “dz”, dan bunyi akhirnya panjang (ā). Jangan dibaca pendek seperti “hadza”. Bunyi panjang itu penting karena membedakannya dari kata lain.</p><p>Tekan 🔊 pada kartu kosakata di atas untuk mendengar pelafalannya.</p>"],
+["5. Kesalahan yang sering terjadi","<p class='bad'>✗ هَذَا مَدْرَسَةٌ (salah: مَدْرَسَةٌ itu muannats)</p><p class='good'>✓ هَذِهِ مَدْرَسَةٌ</p><p>Kesalahan lain: lupa tanwin di akhir kata, atau menerjemahkan “ini adalah” sebagai dua kata Arab. Cukup <b>هَذَا + benda</b>.</p>"]
+],
+e:[["هَذَا كِتَابٌ","Ini buku."],["هَذَا قَلَمٌ","Ini pena."],["هَذَا بَابٌ","Ini pintu."],["هَذَا مَكْتَبٌ","Ini meja."],["هَذَا كُرْسِيٌّ","Ini kursi."],["هَذَا مُدَرِّسٌ","Ini guru."],["هَذَا طَالِبٌ","Ini siswa."],["هَذَا بَيْتٌ","Ini rumah."]],
+q:[["Arti هَذَا كِتَابٌ ؟",["Ini buku","Itu buku","Ini pena","Itu pintu"],0],["Arti مُدَرِّسٌ ؟",["Siswa","Guru","Masjid","Pintu"],1],["“Ini pintu” dalam bahasa Arab:",["هَذَا قَلَمٌ","هَذَا بَابٌ","هَذَا طَالِبٌ","هَذَا مَسْجِدٌ"],1],["Arti قَلَمٌ ؟",["Buku","Pintu","Pena","Guru"],2],["هَذَا dipakai untuk benda berjenis...",["Mudzakkar","Muannats","Jamak saja","Pertanyaan"],0],["Arti كُرْسِيٌّ ؟",["Meja","Kursi","Rumah","Pena"],1],["“Ini meja”:",["هَذَا مَكْتَبٌ","هَذَا كُرْسِيٌّ","هَذَا بَيْتٌ","هَذَا دَفْتَرٌ"],0],["Tanwin pada كِتَابٌ dibaca...",["-un","-an","-in","-ah"],0],["Kata yang cocok dengan هَذَا adalah...",["مَدْرَسَةٌ","مَسْجِدٌ","سَيَّارَةٌ","نَافِذَةٌ"],1],["Arti وَلَدٌ ؟",["Laki-laki dewasa","Anak laki-laki","Guru","Siswa"],1]]
+},
+1:{
+v:[["مَدْرَسَةٌ","sekolah"],["سَيَّارَةٌ","mobil"],["مَدِينَةٌ","kota"],["غُرْفَةٌ","kamar"],["نَافِذَةٌ","jendela"],["حَقِيبَةٌ","tas"],["طَاوِلَةٌ","meja (bundar/makan)"],["سَاعَةٌ","jam"],["مَكْتَبَةٌ","perpustakaan"],["بِنْتٌ","anak perempuan"],["مُدَرِّسَةٌ","guru (perempuan)"],["طَالِبَةٌ","siswi"]],
+n:"<b>هَذِهِ</b> berarti “ini” untuk benda atau orang berjenis <b>muannats</b> (feminin). Pola kalimat sama seperti هَذَا: <b>هَذِهِ + nama benda</b>. Kebanyakan kata muannats berakhiran <b>ة</b> (ta marbuthah).",
+x:[
+["1. Ciri kata muannats","<p>Kebanyakan kata muannats <b>berakhiran ة</b>: مَدْرَسَةٌ، سَيَّارَةٌ، غُرْفَةٌ، نَافِذَةٌ. Ini ciri yang paling mudah diingat.</p><p>Ada juga kata muannats tanpa ة, misalnya <b>بِنْتٌ</b> (anak perempuan). Jenisnya muannats karena maknanya perempuan, jadi tetap dipakai هَذِهِ: هَذِهِ بِنْتٌ.</p>"],
+["2. Dari mudzakkar ke muannats","<table class='tb'><tr><th>Mudzakkar</th><th>Muannats</th><th>Arti</th></tr><tr><td class='ar'>مُدَرِّسٌ</td><td class='ar'>مُدَرِّسَةٌ</td><td>guru</td></tr><tr><td class='ar'>طَالِبٌ</td><td class='ar'>طَالِبَةٌ</td><td>siswa / siswi</td></tr></table><p>Caranya: <b>tambahkan ة</b> di akhir kata untuk menunjukkan perempuan.</p>"],
+["3. Memilih kata tunjuk","<table class='tb'><tr><th>Jenis kata</th><th>Kata tunjuk</th><th>Contoh</th></tr><tr><td>Mudzakkar</td><td class='ar'>هَذَا</td><td class='ar'>هَذَا طَالِبٌ</td></tr><tr><td>Muannats</td><td class='ar'>هَذِهِ</td><td class='ar'>هَذِهِ طَالِبَةٌ</td></tr></table><p>Aturannya: <b>lihat bendanya dulu, baru pilih kata tunjuknya</b>.</p>"],
+["4. Cara membaca","<p><b>هَذِهِ</b> dibaca <i>hādzihī</i>: huruf ه di akhir berharakat kasrah, dibaca “hi”. Jangan tertukar dengan هَذَا yang berakhir “ā”.</p>"],
+["5. Kesalahan yang sering terjadi","<p class='bad'>✗ هَذَا غُرْفَةٌ (salah: غُرْفَةٌ itu muannats)</p><p class='good'>✓ هَذِهِ غُرْفَةٌ</p><p>Kesalahan lain: memakai هَذِهِ untuk benda tanpa ة yang sebenarnya mudzakkar, seperti كِتَابٌ. Hafalkan kosakata bersama jenisnya.</p>"]
+],
+e:[["هَذِهِ مَدْرَسَةٌ","Ini sekolah."],["هَذِهِ سَيَّارَةٌ","Ini mobil."],["هَذِهِ غُرْفَةٌ","Ini kamar."],["هَذِهِ نَافِذَةٌ","Ini jendela."],["هَذِهِ حَقِيبَةٌ","Ini tas."],["هَذِهِ مُدَرِّسَةٌ","Ini guru (perempuan)."],["هَذَا طَالِبٌ، وَهَذِهِ طَالِبَةٌ","Ini siswa, dan ini siswi."],["هَذِهِ مَكْتَبَةٌ","Ini perpustakaan."]],
+q:[["هَذِهِ dipakai untuk...",["Mudzakkar","Muannats","Guru saja","Pertanyaan"],1],["“Ini sekolah” dalam bahasa Arab:",["هَذَا مَدْرَسَةٌ","هَذِهِ مَدْرَسَةٌ","هَذِهِ كِتَابٌ","هَذَا مَسْجِدٌ"],1],["Arti سَيَّارَةٌ ؟",["Kota","Kamar","Mobil","Jendela"],2],["Lengkapi: ___ مَدِينَةٌ",["هَذَا","هَذِهِ","هَلْ","مَنْ"],1],["Lengkapi: ___ طَالِبٌ",["هَذِهِ","تِلْكَ","هَذَا","هَلْ"],2],["Muannats dari مُدَرِّسٌ :",["مُدَرِّسَةٌ","مُدَرِّسَانِ","مُدَرِّسُونَ","الْمُدَرِّسُ"],0],["Arti طَالِبَةٌ ؟",["Siswa","Siswi","Guru","Anak laki-laki"],1],["Ciri paling umum kata muannats:",["Berakhiran ة","Berawalan ال","Berakhiran ـٌ saja","Berawalan هَـ"],0],["Arti هَذِهِ حَقِيبَةٌ ؟",["Ini tas","Itu tas","Ini jam","Ini jendela"],0],["Kalimat yang SALAH:",["هَذِهِ نَافِذَةٌ","هَذَا مَسْجِدٌ","هَذَا غُرْفَةٌ","هَذِهِ مَكْتَبَةٌ"],2]]
+}
+};
+Object.keys(DEEP).forEach(i=>Object.assign(L[i],DEEP[i]));
+let S={done:{}}; // done[i]=bestScore%
+try{const r=localStorage.getItem("dl_prog");if(r)S=JSON.parse(r)}catch(e){}
+const save=()=>{try{localStorage.setItem("dl_prog",JSON.stringify(S))}catch(e){}};
+if(!S.m){const o=S.done||{},d={};for(const k in o)d[+k>=10?+k+3:+k]=o[k];S.done=d;S.m=1;save()}
+const $=document.getElementById("app");
+const EX=[{t:"Ujian Akhir Jilid 1",a:0,b:6},{t:"Ujian Akhir Jilid 2",a:7,b:12},{t:"Ujian Akhir Jilid 3",a:13,b:29}];
+const exOpen=j=>{for(let i=EX[j].a;i<=EX[j].b;i++)if(!(S.done[i]>=PASS))return false;return true};
+
+function toast(m){const o=document.querySelector(".toast");if(o)o.remove();const d=document.createElement("div");d.className="toast";d.textContent=m;document.body.appendChild(d);setTimeout(()=>d.remove(),3200)}
+function say(t){
+  if(!("speechSynthesis" in window)){toast("Perangkat ini belum mendukung suara.");return}
+  const u=new SpeechSynthesisUtterance(t.replace(/\u0640/g,""));u.lang="ar-SA";u.rate=0.75;
+  const vs=speechSynthesis.getVoices(),v=vs.find(x=>/^ar/i.test(x.lang));
+  if(v)u.voice=v;else if(vs.length)toast("Suara Arab belum terpasang. Aktifkan di Pengaturan > Teks-ke-suara.");
+  try{speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){toast("Suara tidak bisa diputar.")}
+}
+// --- Sertifikat ---
+const allEx=()=>!!S.ex&&EX.every((x,j)=>S.ex[j]>=PASS);
+function drawCert(){
+  const c=document.getElementById("cv");if(!c)return;const g=c.getContext("2d"),W=1200,H=850;
+  g.fillStyle="#fbf8ee";g.fillRect(0,0,W,H);
+  g.strokeStyle="#1f7a5a";g.lineWidth=14;g.strokeRect(30,30,W-60,H-60);g.strokeStyle="#c9a13b";g.lineWidth=4;g.strokeRect(54,54,W-108,H-108);
+  g.textAlign="center";g.fillStyle="#1f7a5a";
+  g.font="56px Amiri, 'Traditional Arabic', serif";g.fillText("بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ",W/2,140);
+  g.font="bold 50px system-ui, sans-serif";g.fillText("SERTIFIKAT PENYELESAIAN",W/2,235);
+  g.fillStyle="#555";g.font="28px system-ui, sans-serif";g.fillText("Diberikan kepada",W/2,310);
+  g.fillStyle="#155a42";g.font="bold 72px Amiri, Georgia, serif";g.fillText((S.name||"").trim()||"(isi nama)",W/2,415);
+  g.strokeStyle="#c9a13b";g.lineWidth=3;g.beginPath();g.moveTo(300,440);g.lineTo(900,440);g.stroke();
+  g.fillStyle="#333";g.font="28px system-ui, sans-serif";g.fillText("yang telah menyelesaikan seluruh level dan ujian akhir",W/2,500);
+  g.fillStyle="#1f7a5a";g.font="bold 40px system-ui, sans-serif";g.fillText("Belajar Durusul Lughah · Jilid 1–3",W/2,565);
+  const avg=Math.round(EX.reduce((a,_,j)=>a+(S.ex?S.ex[j]||0:0),0)/EX.length);
+  g.fillStyle="#333";g.font="28px system-ui, sans-serif";g.fillText("Nilai rata-rata ujian akhir: "+avg+"%",W/2,630);
+  g.fillText(new Date().toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"}),W/2,720);
+  g.fillStyle="#888";g.font="22px system-ui, sans-serif";g.fillText("lughoh.pages.dev",W/2,790)
+}
+function cert(){
+  $.innerHTML=`<button class="back" onclick="home()">← Daftar level</button><h1>🎓 Sertifikat</h1><p class="sub">Isi namamu, lalu simpan sebagai gambar.</p>
+  <div class="card"><input id="nm" type="text" maxlength="40" value="${(S.name||"").replace(/"/g,"&quot;")}" placeholder="Nama lengkap" oninput="S.name=this.value;save();drawCert()" style="width:100%;padding:12px;border:1px solid var(--bd);border-radius:10px;font:inherit;background:var(--bg);color:var(--tx)"></div>
+  <canvas id="cv" width="1200" height="850" style="width:100%;height:auto;border-radius:12px;border:1px solid var(--bd)"></canvas>
+  <button class="btn" onclick="dlCert()">Simpan gambar</button>`;drawCert();window.scrollTo(0,0)
+}
+function dlCert(){const c=document.getElementById("cv");const a=document.createElement("a");a.download="sertifikat-durusul-lughah.png";a.href=c.toDataURL("image/png");document.body.appendChild(a);a.click();a.remove()}
+function lockEx(){alert("Ujian akhir terkunci 🔒\nLulus semua level di jilid ini dulu.")}
+function exam(j){const x=EX[j];let p=[];for(let i=x.a;i<=x.b;i++)p=p.concat(L[i].q);const qs=sh(p).slice(0,10).map(q=>({q:q[0],o:sh(q[1]),c:q[1][q[2]]}));Q={ex:j,i:x.a,k:0,s:0,qs,lock:false};ask()}
+function finishEx(){const p=Math.round(Q.s/Q.qs.length*100),j=Q.ex,ok=p>=PASS;S.ex=S.ex||{};if(S.ex[j]==null||p>S.ex[j]){S.ex[j]=p;save()}
+$.innerHTML=`<div class="card res"><div class="big">${ok?"🏆":"💪"}</div><h1>${ok?"Lulus!":"Belum lulus"}</h1><p>${EX[j].t}</p><p>Nilai: <b>${p}%</b> (${Q.s}/${Q.qs.length} benar)</p><p class="sub">${ok?(allEx()?"Alhamdulillah, ketiga jilid tamat! 🎉":"Mumtaz! Jilid ini tuntas."):"Butuh minimal "+PASS+"%. Ulangi materi lalu coba lagi."}</p></div><button class="btn" onclick="exam(${j})">${ok?"Ulangi ujian":"Coba lagi"}</button>${ok&&allEx()?'<button class="btn" onclick="cert()">🎓 Lihat sertifikat</button>':""}<button class="btn alt" onclick="home()">Daftar level</button>`;window.scrollTo(0,0)}
+const unlocked=i=>i===0||S.done[i-1]>=PASS;
+const stars=p=>p>=100?3:p>=90?2:p>=PASS?1:0;
+const sh=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+
+function home(){
+  const n=L.filter((_,i)=>S.done[i]>=PASS).length;
+  let h=`<h1>📖 Belajar Durusul Lughah</h1><p class="sub">Selesaikan tiap ujian dengan nilai ≥ ${PASS}% untuk membuka level berikutnya.</p>
+  <div class="bar"><i style="width:${n/L.length*100}%"></i></div><p class="sub" style="margin-top:-10px">${n} dari ${L.length} level selesai</p>`;
+  L.forEach((l,i)=>{
+    if(JS[i])h+=`<h2 style="font-size:1.05rem;margin:18px 0 8px">${JS[i]}</h2>`;const u=unlocked(i),p=S.done[i],s=p>=PASS?"⭐".repeat(stars(p)):"";
+    h+=`<button class="lv ${u?"":"locked"}" onclick="${u?`mat(${i})`:`lockMsg()`}"><span class="num">${u?i+1:"🔒"}</span><span><b>${l.t}</b><small>${l.d}</small></span><span class="st">${u?(s||(p!=null?p+"%":"▶")):""}</span></button>`;
+  });
+  h+=`<h2 style="font-size:1.05rem;margin:18px 0 8px">🏆 Ujian Akhir per Jilid</h2>`;
+  EX.forEach((x,j)=>{const u=exOpen(j),p=S.ex&&S.ex[j];h+=`<button class="lv ${u?"":"locked"}" onclick="${u?`exam(${j})`:`lockEx()`}"><span class="num">${u?"🏆":"🔒"}</span><span><b>${x.t}</b><small>${u?"10 soal acak dari seluruh level":"Lulus level "+(x.a+1)+"–"+(x.b+1)+" dulu"}</small></span><span class="st">${p>=PASS?"✅ "+p+"%":(p!=null?p+"%":"")}</span></button>`});
+  if(allEx())h+=`<button class="lv" onclick="cert()"><span class="num">🎓</span><span><b>Sertifikat Penyelesaian</b><small>Selamat! Ketiga jilid sudah tamat</small></span><span class="st">🏅</span></button>`;
+  h+=`<div class="foot">Ringkasan alur Jilid 1–3 (belum seluruh bab). Cocokkan dengan kitab untuk pendalaman.<br><button class="link" onclick="reset()">Reset progres</button></div>`;
+  $.innerHTML=h;window.scrollTo(0,0);
+}
+function lockMsg(){alert("Level terkunci 🔒\nLulus ujian level sebelumnya dulu (≥ "+PASS+"%).")}
+function reset(){if(confirm("Hapus semua progres?")){S={done:{}};save();home()}}
+
+function mat(i){
+  const l=L[i];
+  let h=`<button class="back" onclick="home()">← Daftar level</button><h1>Level ${i+1}: ${l.t}</h1><p class="sub">${l.d}</p>
+  <div class="card"><b>Kosakata</b><div class="voc" style="margin-top:8px">${l.v.map(v=>`<div class="vc" data-t="${v[0]}" onclick="say(this.dataset.t)"><i class="sp">🔊</i><span class="ar">${v[0]}</span><small>${v[1]}</small></div>`).join("")}</div></div>
+  <div class="card"><b>Penjelasan</b><div class="note">${l.n}</div></div>${(l.x||[]).map(x=>`<div class="card"><b>${x[0]}</b><div class="body">${x[1]}</div></div>`).join("")}
+  <div class="card"><b>Contoh kalimat</b>${l.e.map(e=>`<div class="ex" data-t="${e[0]}" onclick="say(this.dataset.t)"><span class="ar">${e[0]}</span><small>🔊 ${e[1]}</small></div>`).join("")}</div>
+  <button class="btn" onclick="quiz(${i})">Mulai Ujian ✍️</button>`;
+  $.innerHTML=h;window.scrollTo(0,0);
+}
+
+let Q;
+function quiz(i){Q={i,k:0,s:0,qs:sh(L[i].q).map(q=>{const c=q[1][q[2]];return{q:q[0],o:sh(q[1]),c}}),lock:false};ask()}
+function isAr(t){return /[\u0600-\u06FF]/.test(t)}
+function ask(){
+  const q=Q.qs[Q.k];
+  let qt=q.q.replace(/([\u0600-\u06FF][\u0600-\u06FF\s\u061F:_]*[\u0600-\u06FF؟])/g,'<span class="ar">$1</span>');
+  $.innerHTML=`<button class="back" onclick="${Q.ex!=null?'home()':'mat('+Q.i+')'}">${Q.ex!=null?'← Daftar level':'← Kembali ke materi'}</button><p class="sub">${Q.ex!=null?EX[Q.ex].t:'Ujian Level '+(Q.i+1)} · Soal ${Q.k+1}/${Q.qs.length}</p>
+  <div class="bar"><i style="width:${Q.k/Q.qs.length*100}%"></i></div>
+  <div class="card"><div class="q">${qt}</div><div id="os">${q.o.map((o,j)=>`<button class="opt ${isAr(o)?"ar":""}" onclick="pick(${j})">${o}</button>`).join("")}</div></div><div id="nx"></div>`;
+  Q.lock=false;window.scrollTo(0,0);
+}
+function pick(j){
+  if(Q.lock)return;Q.lock=true;
+  const q=Q.qs[Q.k],bs=document.querySelectorAll(".opt");
+  bs.forEach((b,x)=>{if(q.o[x]===q.c)b.classList.add("ok")});
+  if(q.o[j]===q.c)Q.s++;else bs[j].classList.add("no");
+  const last=Q.k===Q.qs.length-1;
+  document.getElementById("nx").innerHTML=`<button class="btn" onclick="${last?"finish()":"next()"}">${last?"Lihat hasil":"Lanjut →"}</button>`;
+}
+function next(){Q.k++;ask()}
+function finish(){
+  if(Q.ex!=null)return finishEx();
+  const p=Math.round(Q.s/Q.qs.length*100),i=Q.i,ok=p>=PASS;
+  if(S.done[i]==null||p>S.done[i]){S.done[i]=p;save()}
+  const more=i<L.length-1,all=ok&&!more;
+  $.innerHTML=`<div class="card res"><div class="big">${ok?"🎉":"💪"}</div><h1>${ok?"Lulus!":"Belum lulus"}</h1>
+  <div class="stars">${"⭐".repeat(stars(p))||"—"}</div><p>Nilai: <b>${p}%</b> (${Q.s}/${Q.qs.length} benar)</p>
+  <p class="sub">${ok?(all?"Alhamdulillah, semua level selesai! 🌟":"Level "+(i+2)+" kini terbuka."):"Butuh minimal "+PASS+"%. Pelajari materi lagi lalu coba ulang."}</p></div>
+  ${ok&&more?`<button class="btn" onclick="mat(${i+1})">Lanjut ke Level ${i+2} →</button>`:""}
+  <button class="btn alt" onclick="${ok?`quiz(${i})`:`mat(${i})`}">${ok?"Ulangi ujian":"Pelajari materi lagi"}</button>
+  ${ok?"":`<button class="btn alt" onclick="quiz(${i})">Coba ujian lagi</button>`}
+  <button class="btn alt" onclick="home()">Daftar level</button>`;
+  window.scrollTo(0,0);
+}
+home();
+function updToast(w){
+  if(document.querySelector(".utoast"))return;
+  const d=document.createElement("div");d.className="utoast";
+  d.innerHTML='<span>🔔 Versi baru aplikasi tersedia.</span><button id="upd-go">Perbarui</button><button id="upd-no" class="x">Nanti</button>';
+  document.body.appendChild(d);
+  document.getElementById("upd-no").onclick=()=>d.remove();
+  document.getElementById("upd-go").onclick=()=>{
+    d.querySelector("span").textContent="Memperbarui…";window.__updAsked=true;
+    try{localStorage.setItem("dl_updated","1")}catch(e){}
+    w.postMessage({type:"SKIP_WAITING"});
+  };
+}
+if('serviceWorker' in navigator){
+  const hadCtl=!!navigator.serviceWorker.controller;
+  try{if(localStorage.getItem("dl_updated")){localStorage.removeItem("dl_updated");setTimeout(()=>toast("✅ Aplikasi sudah diperbarui ke versi terbaru"),600)}}catch(e){}
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js').then(reg=>{
+      if(reg.waiting&&navigator.serviceWorker.controller)updToast(reg.waiting);
+      reg.addEventListener('updatefound',()=>{
+        const nw=reg.installing;if(!nw)return;
+        nw.addEventListener('statechange',()=>{if(nw.state==='installed'&&navigator.serviceWorker.controller)updToast(nw)});
+      });
+      const chk=()=>{try{reg.update()}catch(e){}};
+      document.addEventListener('visibilitychange',()=>{if(!document.hidden)chk()});
+      setInterval(chk,30*60*1000);
+    }).catch(()=>{});
+  });
+  let rl=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{if(rl||!hadCtl||!window.__updAsked)return;rl=true;location.reload()});
+}
+</script>
+</body>
+</html>
